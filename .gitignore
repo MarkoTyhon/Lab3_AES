@@ -1,0 +1,11 @@
+x64/
+.idea/
+.vs/
+.vscode/
+docker-compose.debug.yml
+docker-compose.yml
+.dockerignore
+CppProperties.json
+lab3_aes.vcxproj
+lab3_aes.vcxproj.filters
+lab3_aes.vcxproj.user
