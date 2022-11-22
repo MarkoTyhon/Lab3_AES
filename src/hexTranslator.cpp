@@ -13,6 +13,7 @@ void HexTranslator::numToHex(std::string binn) {
 	toNHex();
 
 }
+
 void HexTranslator::toNHex() {
 	int hex_len;
 	hex_len = str_hex_num.length();

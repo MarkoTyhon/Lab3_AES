@@ -3,6 +3,7 @@
 
 struct FPU
 {
+	
 	void opMOV();
 	void opCOPY();
 	void opREVERSE();

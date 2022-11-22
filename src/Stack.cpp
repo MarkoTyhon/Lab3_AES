@@ -41,6 +41,11 @@ T Stack<T>::pop() {
 }
 
 template <typename T>
+void Stack<T>::sendToMemory() {
+	mem.addToMem(stack[STACK_LEN - 1]);
+}
+
+template <typename T>
 void Stack<T>::push(T elem) {
 	if (this->full()) {
 		sendToMemory();

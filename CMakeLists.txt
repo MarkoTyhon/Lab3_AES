@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD 14)
 
 file("GLOB_RECURSE" "SOURCE_FILES" "src/*.cpp")
 add_executable(main main.cpp ${SOURCE_FILES})
-target_include_directories(main PUBLIC "./conf")
+target_include_directories(main PUBLIC "./include")
 
 if(UNIX)
 	target_link_libraries(main ncurses)
