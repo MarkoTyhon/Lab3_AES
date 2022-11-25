@@ -13,7 +13,7 @@ struct Memory
 	std::string getFromMem(int indx);
 	void showMem();
 
-	std::string memory[RAM];
+	std::string memory[8];
 	int LEI;
 };
 
