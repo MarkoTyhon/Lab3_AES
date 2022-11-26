@@ -2,7 +2,7 @@
 
 #include <string>
 #include <iostream>
-
+/*
 #include "properties.h"
 #include "hexTranslator.h"
 
@@ -48,3 +48,4 @@ void Memory::showMem() {
 	std::cout << "\n\n";
 
 }
+*/

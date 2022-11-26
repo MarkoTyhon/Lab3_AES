@@ -3,7 +3,7 @@
 #include <string>
 
 #include "properties.h"
-
+/*
 struct Memory
 {
 	Memory();
@@ -17,3 +17,4 @@ struct Memory
 	int LEI;
 };
 
+*/

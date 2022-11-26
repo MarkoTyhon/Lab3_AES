@@ -1,6 +1,6 @@
 #pragma once
 #include "IEEE754.h"
-
+/*
 struct FPU
 {
 	
@@ -11,4 +11,4 @@ struct FPU
 	IEEE754 opSUBTRACT(IEEE754 x, IEEE754 y);
 	IEEE754 opMULT(IEEE754 x, IEEE754 y);
 	IEEE754 opDIVIS(IEEE754 x, IEEE754 y);
-};
+};*/

@@ -1,7 +1,7 @@
 #include "Stack.h"
 #include <iostream>
 #include "properties.h"
-
+/*
 template <typename T>
 Stack<T>::Stack() {
 	empt = -1;
@@ -42,7 +42,7 @@ T Stack<T>::pop() {
 
 template <typename T>
 void Stack<T>::sendToMemory() {
-	mem.addToMem(stack[STACK_LEN - 1]);
+	//mem.addToMem(stack[STACK_LEN - 1]);
 }
 
 template <typename T>
@@ -70,3 +70,4 @@ void Stack<T>::reverse() {
 	stack[0] = stack[1];
 	stack[1] = local;
 }
+*/

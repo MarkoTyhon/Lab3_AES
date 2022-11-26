@@ -1,6 +1,6 @@
 #pragma once
 #include "properties.h"
-
+/*
 template <typename T>
 class Stack
 {
@@ -24,3 +24,4 @@ private:
 	int empt;
 };
 
+*/
