@@ -9,26 +9,37 @@ IEEE754::IEEE754() {
 }
 
 IEEE754::IEEE754(double dec_num) {
+	//init some values
 	std::fill(exp_bias, exp_bias + EXP, 0);
 	last_in_mant = 0;
-	if (dec_num < 0) {
+	man_sign = 1;
+
+	//sign of number{
+	if (dec_num < 0)
 		sign = 1;
-		dec_num = std::abs(dec_num);
-	}
 	else
 		sign = 0;
-
-	man_sign = 1;
+	dec_num = std::abs(dec_num);
+	//}sign of number
+	
 	long int integer_part = floor(dec_num);
 	double floating_part = dec_num - integer_part;
-	convertIntPart(integer_part);
-	if (!isInf()) {
+
+	if (integer_part != 0)
+		convertIntPart(integer_part); 
+
+	if (integer_part == 0 or !isInf()) {
 		convertFloatPart(floating_part);
-		doExpBias();
+		if (exp_bias[0] == 0) 
+			man_sign = 0;
+		else
+			doExpBias();
 		doNum();
 	}
 	
 }
+
+
 
 void IEEE754::doNum() {
 	number[0] = sign;
@@ -78,22 +89,189 @@ void IEEE754::convertIntPart(long int dec_num) {
 }
 
 void IEEE754::convertFloatPart(double dec_num) {
-	for (int i = last_in_mant; i < MANTISSA; i++) {
-		dec_num = dec_num * 2;
-		mantissa[i] = floor(dec_num);
-		dec_num -= floor(dec_num);
-	
+	int couner = 0;
+	int dec_floor = 0;
+	if (exp_bias[0] == 0) {
+		while ((couner <= BIAS-1) && (dec_floor == 0)) {
+			++couner;
+			dec_num = dec_num * 2;
+			dec_floor = floor(dec_num);
+			dec_num -= dec_floor;
+		}
+		exp_bias[0] = BIAS - couner;
 	}
+	
+
+	for (int i = last_in_mant; i < MANTISSA; i++) {		
+		dec_num = dec_num * 2;
+		dec_floor = floor(dec_num);
+		mantissa[i] = dec_floor;
+		dec_num -= dec_floor;
+	}
+	
 }
 
 
 
-std::ostream& operator << (std::ostream& os ,const IEEE754&  num){
+bool IEEE754::operator>(const IEEE754 obj) {
+	if (number[0] < obj.number[0])
+		return true;
+	for (int i = 1; i < MANTISSA + 1; i++)
+		if ((i != 10) && (number[i] > obj.number[i]))
+			return true;
+	return false;
+}
+bool IEEE754::operator==(const IEEE754 obj) {
+	for (int i = 0; i < MANTISSA + 1; i++)
+		if ((i != 10) && (number[i] = obj.number[i]))
+			return false;
+	return true;
+}
+
+bool IEEE754::operator<(const IEEE754 obj) {
+	if (number[0] > obj.number[0])
+		return true;
+	for (int i = 1; i < MANTISSA + 1; i++)
+		if ((i != 10) && (number[i] < obj.number[i]))
+			return true;
+	return false;
+}
+
+bool IEEE754::operator<=(const IEEE754 obj) {
+	return ((*this < obj) || (*this == obj));
+}
+
+bool IEEE754::operator>=(const IEEE754 obj) {
+	return ((*this > obj) || (*this == obj));
+}
+
+std::ostream& operator << (std::ostream& os ,const IEEE754&  obj){
 	for (int i = 0; i < BIT+1; i++) {
-		os << num.number[i];
+		os << obj.number[i];
 		if ((i == 0) || (i == 9) || (i == 10)) {
 			os <<  "  ";
 		}
 	}
 	return os;
 }
+
+int IEEE754::toDec(int bin_num[EXP]) {
+	int res = 0;
+	int mult = 1;
+	for (int i = EXP-1; i >= 0; i--) {
+		res += bin_num[i] * mult;
+		mult *= 2;
+	}
+	return res;
+}
+
+int* IEEE754::doNewMan(int k, IEEE754 & obj) {
+	int new_man[MANTISSA + 2];
+	if (k == 0) {
+		new_man[0] = obj.sign;
+		new_man[1] = obj.man_sign;
+		std::copy(obj.mantissa + 1, obj.mantissa + (MANTISSA - 1), new_man);
+
+	}
+	else {
+		new_man[0] = obj.sign;
+		std::fill(new_man+1, new_man + k, 0);
+		new_man[k + 1] = obj.man_sign;
+		std::copy(obj.mantissa + k + 2, obj.mantissa + (MANTISSA - k - 1), new_man);
+	}
+	return new_man;
+}
+
+void IEEE754::doOldMan(int bias, IEEE754& obj, int* man) {
+	int counter = 1;
+	int old_man[MANTISSA + 1];
+	while (man[counter+1] == 1) {
+		++counter;
+	}
+	obj.exp_bias[0] = BIAS + bias + counter;
+	std::fill(obj.mantissa, obj.mantissa + MANTISSA, 0);
+	std::copy(man + counter + 1, man + MANTISSA + 2, obj.mantissa);
+}
+
+int* IEEE754::add(int* firstMan, int* secondMan) {
+	int result[MANTISSA + 2];
+	int first_sig = firstMan[0];
+	int second_sig = secondMan[0];
+	int buf;
+	if (first_sig == second_sig) {
+		result[0] = first_sig;
+		first_sig = 0;
+		second_sig = 0;
+	}
+	else {
+		result[0] = 1;
+	}
+	for (int i = MANTISSA + 1; i > 0; i++) {
+		buf = firstMan[i] * std::pow(-1, first_sig) + secondMan[i] * std::pow(-1, second_sig) + buf;
+		if ((buf == 0) || (buf == 1)) {
+			result[i] = buf;
+			buf = 0;
+		}
+		else if (buf == 2) {
+			result[i] == 1;
+			buf = 1;
+		}
+		else if (buf == -1)
+			result[i] = 1;
+	}
+	return result;
+}
+
+IEEE754 IEEE754::zeroi() {
+	return IEEE754(0);
+}
+IEEE754 IEEE754::operator + (IEEE754 obj) {
+	IEEE754 res;
+	int thisBias, objBias;
+	int man_sign_this, man_sign_obj;
+	if (number[10] == 0)
+		thisBias = 0;
+	else 
+		thisBias = toDec(exp_bias) - BIAS;
+
+	if (obj.number[10] == 0)
+		objBias = 0;
+	else
+		objBias = toDec(obj.exp_bias) - BIAS;
+
+	int* firstMan;
+	int* secondMan;
+	int resultBias = std::max(thisBias, objBias);
+	if (*this < obj) {
+		secondMan = doNewMan(resultBias - thisBias, *this);
+		firstMan = doNewMan(resultBias - objBias, obj);
+	}
+	else {
+		secondMan = doNewMan(resultBias - objBias, obj);
+		firstMan = doNewMan(resultBias - thisBias, *this);
+	}
+	
+	firstMan = add(firstMan, secondMan);
+	res.sign = firstMan[0];
+	doOldMan(firstMan);
+	res.man_sign = firstMan[0];
+	res.doExpBias();
+	res.doNum();
+	return res;
+}
+
+IEEE754 IEEE754::operator-()const {
+	IEEE754 res;
+	res.sign = 1;
+	res.number[0] = 1;
+	return res;
+}
+
+IEEE754 IEEE754::operator - (IEEE754 obj) {
+	IEEE754 res;
+	return res + (-obj);
+}
+
+/*IEEE754 IEEE754::operator *(IEEE754 obj) {
+	IEEE754 res;
+	return res + (-obj);}*/
