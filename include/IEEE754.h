@@ -16,11 +16,10 @@ public:
 	IEEE754 operator + (IEEE754 y);
 	IEEE754 operator - () const;
 	IEEE754 operator - (IEEE754 y);
-	//IEEE754 operator * (IEEE754 y);
+	IEEE754 operator * (IEEE754 y);
 	//IEEE754 operator / (IEEE754 y);
 	friend std::ostream& operator<< (std::ostream& os, const IEEE754& obj);
 
-	IEEE754 zeroi();
 	int zero[BIT+1] = { 0,   0, 0, 0, 0, 0, 0, 0, 0, 0,   0,   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	int inf0[BIT+1] = { 0,   1, 1, 1, 1, 1, 1, 1, 1, 1,   1,   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	int inf1[BIT+1] = { 1,   1, 1, 1, 1, 1, 1, 1, 1, 1,   1,   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -42,9 +41,11 @@ public:
 
 	std::vector<int> toBin(long int dec_num);
 	int toDec(int bin_num[EXP]);
-	int* doNewMan(int k, IEEE754& obj);
+	int* doNewMan(int k, IEEE754 obj);
 	void doOldMan(int bias, IEEE754&, int* man);
-	int* add(int* objMan, int* thisMan);
+	int* add(int* objMan, int* thisMan, IEEE754& res);
+	int* sub(int* objMan, int* thisMan, IEEE754& res);
+	IEEE754 abss(IEEE754 obj);
 
 
 
