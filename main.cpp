@@ -5,8 +5,8 @@
 #include "IEEE754.h"
 
 int main() {
-	double a = 1.2;
-	double b = 0.000000000000000000000000001;
+	double a = -1.2;
+	double b = -0.000000000000000000000000001;
 	IEEE754 i = IEEE754(a);
 	IEEE754 j = IEEE754(b);
 	IEEE754 res = IEEE754(a*b);

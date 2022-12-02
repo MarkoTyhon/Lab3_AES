@@ -10,6 +10,7 @@ public:
 	IEEE754(double x);
 	bool operator > (const IEEE754 obj);
 	bool operator == (const IEEE754 obj);
+	bool operator != (const IEEE754 obj);
 	bool operator < (const IEEE754 obj);
 	bool operator <=(const IEEE754 obj);
 	bool operator >=(const IEEE754 obj);
@@ -23,7 +24,16 @@ public:
 	int inf0[BIT+1] = { 0,   1, 1, 1, 1, 1, 1, 1, 1, 1,   1,   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	int inf1[BIT+1] = { 1,   1, 1, 1, 1, 1, 1, 1, 1, 1,   1,   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	int NaN[BIT +1]	= { 0,   1, 1, 1, 1, 1, 1, 1, 1, 1,   1,   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
-	IEEE754 zero();
+	IEEE754 getZero();
+	IEEE754 getInf(int sign);
+	IEEE754 getNaN();
+	IEEE754 getMaxNormal();
+	IEEE754 getMinNormal();
+	IEEE754 getMaxDenormal();
+	IEEE754 getMinDenormal();
+
+
+
 
 	int number[BIT+1];
 	int man_sign;
@@ -48,5 +58,7 @@ public:
 	IEEE754 abss(IEEE754 obj);
 	int getBias(IEEE754 exp);
 	int* mult(int* objMan, int* thisMan);
+	int* divis(int* objMan, int* thisMan);
+
 };
 
