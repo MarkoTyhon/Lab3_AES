@@ -17,7 +17,7 @@ public:
 	IEEE754 operator - () const;
 	IEEE754 operator - (IEEE754 y);
 	IEEE754 operator * (IEEE754 y);
-	//IEEE754 operator / (IEEE754 y);
+	IEEE754 operator / (IEEE754 y);
 	friend std::ostream& operator<< (std::ostream& os, const IEEE754& obj);
 
 	int inf0[BIT+1] = { 0,   1, 1, 1, 1, 1, 1, 1, 1, 1,   1,   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -48,8 +48,5 @@ public:
 	IEEE754 abss(IEEE754 obj);
 	int getBias(IEEE754 exp);
 	int* mult(int* objMan, int* thisMan);
-
-
-
 };
 
