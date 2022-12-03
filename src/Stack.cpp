@@ -1,7 +1,7 @@
 #include "Stack.h"
 #include <iostream>
 #include "properties.h"
-/*
+
 template <typename T>
 Stack<T>::Stack() {
 	empt = -1;
@@ -40,10 +40,6 @@ T Stack<T>::pop() {
 	return stack[0];
 }
 
-template <typename T>
-void Stack<T>::sendToMemory() {
-	//mem.addToMem(stack[STACK_LEN - 1]);
-}
 
 template <typename T>
 void Stack<T>::push(T elem) {
@@ -54,8 +50,9 @@ void Stack<T>::push(T elem) {
 	for (int i = LEI; i > 1; i--) {
 		stack[i] = stack[i - 1];
 	}
+	++LEI;
+	free[LEI] = false;
 	stack[0] = elem;
-	
 }
 
 template <typename T>
@@ -64,10 +61,13 @@ void Stack<T>::copy() {
 }
 
 template <typename T>
-
 void Stack<T>::reverse() {
 	T local = stack[0];
 	stack[0] = stack[1];
 	stack[1] = local;
 }
-*/
+
+template <typename T>
+int Stack<T>::size() {
+	return LEI + 1;
+}

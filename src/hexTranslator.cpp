@@ -7,8 +7,13 @@
 #include "properties.h"
 
 
-void HexTranslator::numToHex(std::string binn) {
-	bin_num = binn;
+void HexTranslator::numToHex(IEEE754 binn) {
+	bin_num = std::to_string(binn.sign);
+	for (int i : binn.exp_bias)
+		bin_num += std::to_string(i);
+	for (int i : binn.mantissa)
+		bin_num += std::to_string(i);
+
 	toHex();
 	toNHex();
 

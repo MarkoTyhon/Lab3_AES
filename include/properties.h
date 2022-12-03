@@ -4,7 +4,7 @@
 #define STACK_LEN 8
 #define RAM 8
 
-#define HEX_LEN (int)32/8
+#define HEX_LEN (int)40/8
 
 #define MANTISSA 30
 #define EXP 9

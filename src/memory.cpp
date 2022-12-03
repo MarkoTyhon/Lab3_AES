@@ -2,27 +2,26 @@
 
 #include <string>
 #include <iostream>
-/*
 #include "properties.h"
 #include "hexTranslator.h"
 
 Memory::Memory() {
 	for (int i = 0; i < RAM; i++) {
-		memory[i] = std::string(BIT, '0');
+		memory[i] = IEEE754(0);
 		LEI = 0;
 	}
 }
 
-void Memory::addToMem(std::string el) {
+void Memory::addToMem(IEEE754 el) {
 	memory[LEI] = el;
 	++LEI;
 }
 
-void Memory::addToMem(int indx, std::string el) {
+void Memory::addToMem(int indx, IEEE754 el) {
 	memory[indx] = el;
 }
 
-std::string Memory::getFromMem(int indx) {
+IEEE754 Memory::getFromMem(int indx) {
 	return memory[indx];
 }
 
@@ -48,4 +47,3 @@ void Memory::showMem() {
 	std::cout << "\n\n";
 
 }
-*/

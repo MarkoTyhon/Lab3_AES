@@ -1,13 +1,13 @@
 #pragma once
 #include "properties.h"
-/*
+
 template <typename T>
 class Stack
 {
 public:
 	Stack();
 
-	void sendToMemory();
+	int size();
 	void copy();
 	void reverse();
 	void push(T elem);
@@ -23,5 +23,3 @@ private:
 	int LEI;
 	int empt;
 };
-
-*/

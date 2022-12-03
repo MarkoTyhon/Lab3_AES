@@ -4,7 +4,7 @@
 #include <vector>
 
 struct HexTranslator {
-	void numToHex(std::string bin_num);
+	void numToHex(IEEE754 bin_num);
 	void toNHex();
 	void toHex();
 
