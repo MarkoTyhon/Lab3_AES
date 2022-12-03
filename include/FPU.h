@@ -34,17 +34,16 @@ struct FPU
 	void opMOV();
 	void opLOAD();
 	void opCOPY();
-	//void opCOPY(int idx);
 	void opREVERSE();
 	void opADD();
 	void opSUBTRACT();
 	void opMULT();
 	void opDIVIS();
-
-	//void showProc();
-	int pressAnyKey();/*
-	void showStack();
-	void toMemory();*/
+	void opGET();
+	void showProc();
+	int pressAnyKey();
+	void gtAllVlFrStck();
+	void toMemory();
 
 	std::string cmd[2];
 	int TC = 0;

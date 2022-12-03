@@ -27,14 +27,14 @@ void FPU::tact1() {
 
 	PS = getValue(1).sign;
 
-	//showProces();
+	showProc();
 }
 
 void FPU::tact2() {
 	TC = 2;
 	doCommand();
 	PS = getValue(1).sign;
-	//showProces();
+	showProc();
 }
 
 
@@ -65,12 +65,19 @@ IEEE754 FPU::getValue(int indx) {
 	}
 }
 
+void FPU::toMemory() {
+	mem.addToMem(gtNVlFrStck(7));
+}
+
 void FPU::opMOV() {
+	if (reg_stack.full()) {
+		toMemory();
+	}
 	reg_stack.push(getValue(1));
 }
 
 void FPU::opLOAD() {
-	IEEE754 val = getValue(1);
+	IEEE754 val = reg_stack.top();
 
 	if (cmd[1].find("[") == std::string::npos)
 		mem.addToMem(val);
@@ -80,15 +87,20 @@ void FPU::opLOAD() {
 
 
 void FPU::opCOPY() {
-	reg_stack.copy();
+	reg_stack.copy();	
 }
 
 void FPU::opREVERSE() {
 	reg_stack.reverse();
 }
 
+void FPU::opGET() {
+	reg_stack.push(getValue(1));
+}
+
+
 void FPU::doCommand() {
-	if (cmd[0] == "mov") { //redone
+	if (cmd[0] == "mov") {
 		opMOV();
 	}
 	else if (cmd[0] == "load") {
@@ -111,6 +123,9 @@ void FPU::doCommand() {
 	}
 	else if (cmd[0] == "reverse") {
 		opREVERSE();
+	}
+	else if (cmd[0] == "get") {
+		opGET();
 	}
 }
 
@@ -150,7 +165,6 @@ void FPU::getCommand(std::string command) {
 	
 }
 
-
 void FPU::opADD() {
 	IEEE754 x = reg_stack.pop();
 	IEEE754 y = reg_stack.pop();
@@ -184,4 +198,39 @@ int FPU::pressAnyKey() {
 	int exit = getch();
 #endif
 	return exit;
+}
+
+void FPU::gtAllVlFrStck() {
+	Stack<IEEE754> loc_stack;
+	loc_stack = reg_stack;
+	IEEE754 buf;
+	int ccount = -1;
+	while (!loc_stack.empty()) {
+		buf = loc_stack.top();
+		for (int i = 0; i < BIT / 8; i++) {
+			std::cout << loc_stack.pop() << "\n";
+		}
+	}
+	std::cout << "\n\n";
+}
+
+void FPU::showProc() {
+	std::cout << std::string(115, '-') + "\n\n";
+
+	std::cout << "IR: " << IR << "\n\n";
+
+	std::cout << "Stack:\n";
+	gtAllVlFrStck();
+
+	std::cout << "RAM:\n";
+	mem.showMem();
+
+	std::cout << "PS: " << PS << "\n";
+
+	std::cout << "PC: " << PC << "\n";
+
+	std::cout << "TC: " << TC << "\n";
+
+	std::cout << "\n" + std::string(115, '-');
+
 }
