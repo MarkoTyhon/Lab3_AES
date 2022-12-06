@@ -49,7 +49,7 @@ void IEEE754::doNum() {
 
 bool IEEE754::isInf() {
 	bool res = exp_bias[0] >= MAX_BIAS;
-	if (res >= MAX_BIAS) {
+	if (res) {
 		*this = getInf(sign);
 	}
 	return res;

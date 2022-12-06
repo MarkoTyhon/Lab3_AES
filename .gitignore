@@ -1,8 +1,0 @@
-x64/
-.idea/
-.vs/
-.vscode/
-build/
-docker-compose.debug.yml
-docker-compose.yml
-.dockerignore

@@ -18,9 +18,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Stack.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\fileParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -59,12 +56,6 @@
     <ClInclude Include="conf\properties.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="conf\Stack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Stack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\fileParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -86,10 +77,8 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="cmd.txt" />
-    <Text Include="CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
-    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

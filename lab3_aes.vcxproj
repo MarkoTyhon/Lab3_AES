@@ -151,9 +151,6 @@
     <ClCompile Include="src\memory.cpp">
       <DeploymentContent>true</DeploymentContent>
     </ClCompile>
-    <ClCompile Include="src\Stack.cpp">
-      <DeploymentContent>true</DeploymentContent>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="conf\binTranslator.h">
@@ -177,9 +174,6 @@
     <ClInclude Include="conf\properties.h">
       <DeploymentContent>true</DeploymentContent>
     </ClInclude>
-    <ClInclude Include="conf\Stack.h">
-      <DeploymentContent>true</DeploymentContent>
-    </ClInclude>
     <ClInclude Include="include\fileParser.h">
       <DeploymentContent>true</DeploymentContent>
     </ClInclude>
@@ -198,19 +192,14 @@
     <ClInclude Include="include\properties.h">
       <DeploymentContent>true</DeploymentContent>
     </ClInclude>
-    <ClInclude Include="include\Stack.h">
-      <DeploymentContent>true</DeploymentContent>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="CMakeLists.txt" />
     <Text Include="cmd.txt">
       <DeploymentContent>true</DeploymentContent>
     </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
-    <None Include="cpp.hint" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
