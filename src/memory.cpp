@@ -13,6 +13,8 @@ Memory::Memory() {
 }
 
 void Memory::addToMem(IEEE754 el) {
+	if (LEI == RAM - 1)
+		LEI = 0;
 	memory[LEI] = el;
 	++LEI;
 }
@@ -25,19 +27,25 @@ IEEE754 Memory::getFromMem(int indx) {
 	return memory[indx];
 }
 
+IEEE754 Memory::getFromMem() {
+	if (LEI != 0)
+		return memory[LEI - 1];
+	else
+		return memory[LEI];
+};
+
 void Memory::showMem() {
 	HexTranslator hex;
 	int counter = 0;
 	for (int j = 0; j < RAM; j++) {
+		hex.numToHex(memory[j]);
 		for (int i = 0; i < HEX_LEN; i++) {
-			hex.numToHex(memory[j]);
 			std::cout << hex.str_hex_num.at(i);
 			if (((i % 2) == 1) && (i != HEX_LEN - 1)) std::cout << "|";
 		}
 		if (j != RAM - 1)std::cout << "|";
 	}
 	std::cout << "\n";
-
 	for (int i = 0; i < RAM * HEX_LEN / 2; i++) {
 		if (counter < 10) std::cout << 0;
 		std::cout << counter;

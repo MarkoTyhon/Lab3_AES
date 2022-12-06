@@ -27,7 +27,7 @@ IEEE754::IEEE754(double dec_num) {
 	if (integer_part != 0)
 		convertIntPart(integer_part); 
 
-	if (integer_part == 0 or !isInf()) {
+	if ((integer_part == 0) || (!isInf())) {
 		convertFloatPart(floating_part);
 		if (exp_bias[0] == 0) 
 			man_sign = 0;
@@ -49,9 +49,8 @@ void IEEE754::doNum() {
 
 bool IEEE754::isInf() {
 	bool res = exp_bias[0] >= MAX_BIAS;
-	if (exp_bias[0] >= MAX_BIAS) {
-		std::copy(inf0+1, inf0 + BIT, exp_bias+1);
-		exp_bias[0] = sign;
+	if (res >= MAX_BIAS) {
+		*this = getInf(sign);
 	}
 	return res;
 }
@@ -159,9 +158,9 @@ std::ostream& operator << (std::ostream& os ,const IEEE754&  obj){
 	return os;
 }
 
-int IEEE754::toDec(int* bin_num) {
-	int res = 0;
-	int mult = 1;
+unsigned long long IEEE754::toDec(int* bin_num) {
+	unsigned long long res = 0;
+	unsigned long long mult = 1;
 	for (int i = EXP-1; i >= 0; i--) {
 		res += bin_num[i] * mult;
 		mult *= 2;
@@ -261,14 +260,8 @@ int* IEEE754::sub(int* firstMan, int* secondMan, IEEE754& res) {
 	int first_sig = firstMan[0];
 	int second_sig = secondMan[0];
 	int buf = 0;
-	for (int i = 0; i < MANTISSA + 2; i++) {
-		std::cout << firstMan[i];
-	}
-	std::cout << "" << std::endl;
-	for (int i = 0; i < MANTISSA + 2; i++) {
-		std::cout << secondMan[i];
-	}
-	std::cout << "" << std::endl;
+
+
 	for (int i = MANTISSA + 1; i > 0; i--) {
 
 		buf = firstMan[i] - secondMan[i] + buf;
@@ -295,7 +288,16 @@ int* IEEE754::sub(int* firstMan, int* secondMan, IEEE754& res) {
 
 
 IEEE754 IEEE754::operator + (IEEE754 obj) {
-	IEEE754 res;
+	IEEE754 res = *this;
+	if (abss(obj) == getInf(0)) {
+		if (abss(res) == getInf(1))
+			return getNaN();
+	}
+	if (abss(res) == getInf(1)) {
+		if (abss(obj) == getInf(0))
+			return getNaN();
+	}
+	
 	int thisBias = 0, objBias= 0;
 
 
@@ -403,6 +405,10 @@ IEEE754 IEEE754::operator *(IEEE754 obj) {
 		if (abss(res) == getInf(0))
 			return getNaN();
 	}
+	if (abss(res) == getZero()) {
+		if (abss(obj) == getInf(0))
+			return getNaN();
+	}
 
 	
 	int thisBias;
@@ -431,17 +437,7 @@ IEEE754 IEEE754::operator *(IEEE754 obj) {
 	return res;
 }
 
-int* IEEE754::divis(int* firstMan, int* secondMan) {
-	static int result[(MANTISSA * 2) + 3]; 
-	std::fill(result, result + (MANTISSA * 2) + 3, 0);
-	result[0] = firstMan[0] != secondMan[0];
-	int buf = 0;
 
-	for (int i = 0; i < MANTISSA + 2; i++) {
-
-	}
-	return result;
-}
 
 IEEE754 IEEE754::getZero() {
 	IEEE754 zero;
@@ -466,8 +462,8 @@ IEEE754 IEEE754::getNaN() {
 	IEEE754 NaN;
 	NaN.sign = 0;
 	NaN.man_sign = 1;
-	std::fill(NaN.mantissa, NaN.mantissa + MANTISSA, 1);
-	std::fill(NaN.exp_bias, NaN.exp_bias + EXP-1, 0);
+	std::fill(NaN.mantissa, NaN.mantissa + MANTISSA-1, 0);
+	std::fill(NaN.exp_bias, NaN.exp_bias + EXP, 1);
 	NaN.mantissa[MANTISSA - 1] = 1;
 	NaN.doNum();
 	return NaN;
@@ -517,10 +513,28 @@ IEEE754 IEEE754::getMinDenormal() {
 }
 
 
+IEEE754 IEEE754::get10E0() {
+	IEEE754 one;
+	one.sign = 0;
+	one.man_sign = 1;
+	std::fill(one.mantissa, one.mantissa + MANTISSA, 0);
+	std::fill(one.exp_bias+1, one.exp_bias + EXP, 1);
+	one.exp_bias[0] = 0;
+	one.doNum();
+	return one;
+}
+
+double IEEE754::getManD(IEEE754 obj) {
+	double res = obj.man_sign;
+	for (int i = 1; i < MANTISSA + 1; i++) {
+		res += obj.mantissa[i-1]*pow(2, -i);
+	}
+	return res;
+}
 
 IEEE754 IEEE754::operator / (IEEE754 obj) {
 	IEEE754 res = *this;
-	if ((abss(res) == getInf(0))|| abss(res) == getZero()) {
+	if ((abss(res) == getInf(0)) || abss(res) == getZero()) {
 		if ((abss(obj) == getInf(0)) || (abss(obj) == getZero()))
 			return getNaN();
 		else
@@ -529,40 +543,22 @@ IEEE754 IEEE754::operator / (IEEE754 obj) {
 	else if (abss(obj) == getInf(0)) {
 		if ((abss(res) != getInf(0)) || (abss(res) != getZero()))
 			return getZero();
-	}  
+	}
 	else if (abss(obj) == getZero()) {
 		if ((abss(res) != getInf(0)) || (abss(res) != getZero()))
 			return getInf(res.sign);
-
-	}  
-
-	int thisBias;
-	int* ptr;
-	int firstMan[MANTISSA + 2];
-	int secondMan[MANTISSA + 2];
-	thisBias = getBias(res) - getBias(obj);
-	thisBias -= BIAS;
-	std::cout << thisBias << "\n";
-
-	ptr = doNewMan(0, 0, *this);
-	std::copy(ptr, ptr + MANTISSA + 2, firstMan);
-	ptr = doNewMan(0, 0, obj);
-	std::copy(ptr, ptr + MANTISSA + 2, secondMan);
-
-	ptr = divis(firstMan, secondMan);
-	/*res.sign = ptr[0];
-	if (ptr[1] != 0) {
-		thisBias += 1;
 	}
-	else
-		std::copy(ptr + 1, ptr + MANTISSA + 3, ptr);
-	for (int i = 0; i < MANTISSA + 2; i++) {
-		std::cout << ptr[i];
-	}
-	std::cout << "\n";
-	doOldMan(thisBias, res, ptr);
-	res.doExpBias();
-	res.doNum();*/
-	return res;
+
+	if (res == obj)
+		return get10E0();
+
+	int firstBias = getBias(res);
+	int secondBias = getBias(obj) ;
+	double man1 = getManD(res);
+	double man2 = getManD(obj);
+	double first = pow(-1, res.sign) * man1 * pow(2, firstBias);
+	double second = pow(-1, obj.sign) * man2 * pow(2, secondBias);
+
+	return IEEE754(first/second);
 }
 

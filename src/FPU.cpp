@@ -21,11 +21,14 @@ void FPU::mainProc(std::vector<std::string> cmdlist) {
 void FPU::tact1() {
 	TC = 1;
 	IR = cmd[0];
-	if (cmd[1] != "NONE")
-		IR += " " + cmd[0];
+	PS = 0;
+	if (cmd[1] != "NONE") {
+		IR += " " + cmd[1];
+		PS = getValue(1).sign;
+	}
 	++PC;
-
-	PS = getValue(1).sign;
+	
+	
 
 	showProc();
 }
@@ -33,13 +36,14 @@ void FPU::tact1() {
 void FPU::tact2() {
 	TC = 2;
 	doCommand();
-	PS = getValue(1).sign;
+	if (cmd[1] != "NONE") 
+		PS = getValue(1).sign;
 	showProc();
 }
 
 
 IEEE754 FPU::gtNVlFrStck(int indx) {
-	Stack<IEEE754> loc_stack;
+	std::stack<IEEE754> loc_stack;
 	loc_stack = reg_stack;
 	while (loc_stack.size() != indx + 1) {
 		loc_stack.pop();
@@ -57,7 +61,12 @@ IEEE754 FPU::getValue(int indx) {
 		}
 	}
 	else if (cmd[indx].find("mem") != std::string::npos) {
-		return mem.getFromMem(std::stoi(cmd[indx].substr(cmd[indx].length() - 2, 1).c_str()));
+		if (cmd[indx].find("[") == std::string::npos) {
+			return mem.getFromMem();
+		}
+		else {
+			return mem.getFromMem(std::stoi(cmd[indx].substr(cmd[indx].length() - 2, 1).c_str()));
+		}
 	}
 	else {
 		double dbl_value = std::stod(cmd[indx].c_str());
@@ -65,12 +74,25 @@ IEEE754 FPU::getValue(int indx) {
 	}
 }
 
+void FPU::deleteLastElem() {
+	std::stack<IEEE754> loc_stack;
+	while (reg_stack.size() < STACK_LEN) {
+		loc_stack.push(reg_stack.top());
+		reg_stack.pop();
+	}
+	for (int i = 0; i < loc_stack.size(); i++) {
+		reg_stack.push(loc_stack.top());
+		loc_stack.pop();
+	}
+}
+
 void FPU::toMemory() {
-	mem.addToMem(gtNVlFrStck(7));
+	mem.addToMem(gtNVlFrStck(STACK_LEN-1));
+	deleteLastElem();
 }
 
 void FPU::opMOV() {
-	if (reg_stack.full()) {
+	if (reg_stack.size() == 8) {
 		toMemory();
 	}
 	reg_stack.push(getValue(1));
@@ -78,6 +100,7 @@ void FPU::opMOV() {
 
 void FPU::opLOAD() {
 	IEEE754 val = reg_stack.top();
+	reg_stack.pop();
 
 	if (cmd[1].find("[") == std::string::npos)
 		mem.addToMem(val);
@@ -87,11 +110,17 @@ void FPU::opLOAD() {
 
 
 void FPU::opCOPY() {
-	reg_stack.copy();	
+	reg_stack.push(reg_stack.top());	
 }
 
 void FPU::opREVERSE() {
-	reg_stack.reverse();
+	IEEE754 buf = reg_stack.top();
+	reg_stack.pop();
+	IEEE754 buf2 = reg_stack.top();
+	reg_stack.pop();
+	reg_stack.push(buf2);
+	reg_stack.push(buf);
+	
 }
 
 void FPU::opGET() {
@@ -166,27 +195,47 @@ void FPU::getCommand(std::string command) {
 }
 
 void FPU::opADD() {
-	IEEE754 x = reg_stack.pop();
-	IEEE754 y = reg_stack.pop();
-	reg_stack.push(x + y);
+	IEEE754 x = reg_stack.top();
+	reg_stack.pop();
+	IEEE754 y = reg_stack.top();
+	reg_stack.pop();
+	if ((x == ieee.getNaN()) || (y == ieee.getNaN()))
+		std::cout << "NaN VALUE!" << "\n";
+	else
+		reg_stack.push(x + y);
 }
 
 void FPU::opSUBTRACT() {
-	IEEE754 x = reg_stack.pop();
-	IEEE754 y = reg_stack.pop();
-	reg_stack.push(x - y);
+	IEEE754 x = reg_stack.top();
+	reg_stack.pop();
+	IEEE754 y = reg_stack.top();
+	reg_stack.pop();
+	if ((x == ieee.getNaN()) || (y == ieee.getNaN()))
+		std::cout << "NaN VALUE!" << "\n";
+	else 
+		reg_stack.push(x - y);
 }
 
 void FPU::opMULT() {
-	IEEE754 x = reg_stack.pop();
-	IEEE754 y = reg_stack.pop();
-	reg_stack.push(x * y);
+	IEEE754 x = reg_stack.top();
+	reg_stack.pop();
+	IEEE754 y = reg_stack.top();
+	reg_stack.pop();
+	if ((x == ieee.getNaN()) || (y == ieee.getNaN()))
+		std::cout << "NaN VALUE!" << "\n";
+	else 
+		reg_stack.push(x * y);
 }
 
 void FPU::opDIVIS() {
-	IEEE754 x = reg_stack.pop();
-	IEEE754 y = reg_stack.pop();
-	reg_stack.push(x / y);
+	IEEE754 x = reg_stack.top();
+	reg_stack.pop();
+	IEEE754 y = reg_stack.top();
+	reg_stack.pop();
+	if ((x == ieee.getNaN()) || (y == ieee.getNaN()))
+		std::cout << "NaN VALUE!" << "\n";
+	else 
+		reg_stack.push(x / y);
 }
 
 int FPU::pressAnyKey() {
@@ -201,14 +250,19 @@ int FPU::pressAnyKey() {
 }
 
 void FPU::gtAllVlFrStck() {
-	Stack<IEEE754> loc_stack;
+	std::stack<IEEE754> loc_stack;
 	loc_stack = reg_stack;
 	IEEE754 buf;
 	int ccount = -1;
 	while (!loc_stack.empty()) {
 		buf = loc_stack.top();
-		for (int i = 0; i < BIT / 8; i++) {
-			std::cout << loc_stack.pop() << "\n";
+		std::cout << "\t" << buf <<"\n";
+		loc_stack.pop();
+	}
+	if (reg_stack.size() < STACK_LEN) {
+		for (int i = 0; i < STACK_LEN - reg_stack.size(); i++) {
+			buf = buf.getNaN();
+			std::cout << "\t" << buf << "\n";
 		}
 	}
 	std::cout << "\n\n";

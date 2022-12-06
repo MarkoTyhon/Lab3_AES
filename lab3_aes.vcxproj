@@ -136,9 +136,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="src\binTranslator.cpp">
-      <DeploymentContent>true</DeploymentContent>
-    </ClCompile>
     <ClCompile Include="src\fileParser.cpp">
       <DeploymentContent>true</DeploymentContent>
     </ClCompile>
@@ -181,9 +178,6 @@
       <DeploymentContent>true</DeploymentContent>
     </ClInclude>
     <ClInclude Include="conf\Stack.h">
-      <DeploymentContent>true</DeploymentContent>
-    </ClInclude>
-    <ClInclude Include="include\binTranslator.h">
       <DeploymentContent>true</DeploymentContent>
     </ClInclude>
     <ClInclude Include="include\fileParser.h">

@@ -1,7 +1,8 @@
 #pragma once
 #include "properties.h"
-#include <algorithm>
 #include <vector>
+#include <iostream>
+#include <algorithm>
 
 class IEEE754
 {
@@ -28,9 +29,7 @@ public:
 	IEEE754 getMinNormal();
 	IEEE754 getMaxDenormal();
 	IEEE754 getMinDenormal();
-
-
-
+	IEEE754 get10E0();
 
 	int number[BIT+1];
 	int man_sign;
@@ -38,6 +37,7 @@ public:
 	int sign;
 	int exp_bias[EXP];
 	int last_in_mant = 0;
+
 	void convertIntPart(long int dec_num);
 	void convertFloatPart(double dec_num);
 	void doExpBias();
@@ -47,15 +47,15 @@ public:
 
 
 	std::vector<int> toBin(long int dec_num);
-	int toDec(int* bin_num);
+	unsigned long long  toDec(int* bin_num);
 	int* doNewMan(int oldBias, int newBias, IEEE754 obj);
-	void doOldMan(int bias, IEEE754&, int* man);
+	void doOldMan(int bias, IEEE754& obj, int* man);
 	int* add(int* objMan, int* thisMan, IEEE754& res);
 	int* sub(int* objMan, int* thisMan, IEEE754& res);
 	IEEE754 abss(IEEE754 obj);
 	int getBias(IEEE754 exp);
 	int* mult(int* objMan, int* thisMan);
-	int* divis(int* objMan, int* thisMan);
+	double getManD(IEEE754 obj);
 
-};
+};	
 

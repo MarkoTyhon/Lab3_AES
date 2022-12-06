@@ -1,12 +1,14 @@
 #pragma once
 #include "IEEE754.h"
-#include "Stack.h"
+#include <stack>
 #include "Memory.h"
 
 #include <vector>
 #include <string>
 #include <regex>
 #include <iostream>
+#include <stack>
+
 
 #ifdef _WIN32
 #include <conio.h>
@@ -44,6 +46,7 @@ struct FPU
 	int pressAnyKey();
 	void gtAllVlFrStck();
 	void toMemory();
+	void deleteLastElem();
 
 	std::string cmd[2];
 	int TC = 0;
@@ -51,6 +54,7 @@ struct FPU
 	int PC = 0;
 	std::string IR;
 
-	Stack<IEEE754> reg_stack;
+	std::stack<IEEE754> reg_stack;
+	IEEE754 ieee;
 	Memory mem;
 };

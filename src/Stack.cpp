@@ -1,4 +1,4 @@
-#include "Stack.h"
+/*#include "Stack.h"
 #include <iostream>
 #include "properties.h"
 
@@ -43,10 +43,6 @@ T Stack<T>::pop() {
 
 template <typename T>
 void Stack<T>::push(T elem) {
-	if (this->full()) {
-		sendToMemory();
-	}
-	
 	for (int i = LEI; i > 1; i--) {
 		stack[i] = stack[i - 1];
 	}
@@ -70,4 +66,4 @@ void Stack<T>::reverse() {
 template <typename T>
 int Stack<T>::size() {
 	return LEI + 1;
-}
+}*/

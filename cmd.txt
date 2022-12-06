@@ -1,0 +1,13 @@
+mov 2
+copy
+mult
+mov 3
+copy
+mult
+add
+mov 2
+mov 3
+mov 2
+mult
+mult
+div
