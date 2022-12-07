@@ -156,6 +156,15 @@ void FPU::doCommand() {
 	else if (cmd[0] == "get") {
 		opGET();
 	}
+	else if (cmd[0] == "cos") {
+		opLN();
+	}
+	else if (cmd[0] == "tg") {
+		opTG();
+	}
+	else if (cmd[0] == "ln") {
+		opCOS();
+	}
 }
 
 std::string FPU::ltrim(const std::string& s) {
@@ -193,6 +202,35 @@ void FPU::getCommand(std::string command) {
 	}
 	
 }
+
+void FPU::opCOS() {
+	IEEE754 y = reg_stack.top();
+	reg_stack.pop();
+	if (y == ieee.getNaN())
+		std::cout << "NaN VALUE!" << "\n";
+	else
+		reg_stack.push(y.cos());
+}
+
+
+void FPU::opTG() {
+	IEEE754 y = reg_stack.top();
+	reg_stack.pop();
+	if (y == ieee.getNaN())
+		std::cout << "NaN VALUE!" << "\n";
+	else
+		reg_stack.push(y.tg());
+}
+
+void FPU::opLN() {
+	IEEE754 y = reg_stack.top();
+	reg_stack.pop();
+	if (y == ieee.getNaN())
+		std::cout << "NaN VALUE!" << "\n";
+	else
+		reg_stack.push(y.log());
+}
+
 
 void FPU::opADD() {
 	IEEE754 x = reg_stack.top();

@@ -1,0 +1,10 @@
+﻿  IEEE754.cpp
+C:\Users\Marko\source\repos\lab3_aes\lab3_aes\src\IEEE754.cpp(25,24): warning C4244: 'initializing': conversion from 'double' to 'long', possible loss of data
+C:\Users\Marko\source\repos\lab3_aes\lab3_aes\src\IEEE754.cpp(74,32): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Marko\source\repos\lab3_aes\lab3_aes\src\IEEE754.cpp(83,41): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Marko\source\repos\lab3_aes\lab3_aes\src\IEEE754.cpp(97,21): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\Marko\source\repos\lab3_aes\lab3_aes\src\IEEE754.cpp(106,20): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\Marko\source\repos\lab3_aes\lab3_aes\src\IEEE754.cpp(176,11): warning C4244: 'initializing': conversion from 'unsigned __int64' to 'int', possible loss of data
+  memory.cpp
+  Generating Code...
+  lab3_aes.vcxproj -> C:\Users\Marko\source\repos\lab3_aes\x64\Debug\lab3_aes.exe

@@ -1,13 +1,10 @@
-mov 2
-copy
-mult
+mov 5
+tg
 mov 3
-copy
+mult
+mov 5
+cos
+mov 8
+ln
 mult
 add
-mov 2
-mov 3
-mov 2
-mult
-mult
-div

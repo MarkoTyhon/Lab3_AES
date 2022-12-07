@@ -42,6 +42,9 @@ struct FPU
 	void opMULT();
 	void opDIVIS();
 	void opGET();
+	void opCOS();
+	void opTG();
+	void opLN();
 	void showProc();
 	int pressAnyKey();
 	void gtAllVlFrStck();

@@ -21,7 +21,7 @@ int main() {
 	std::cout << "Maximal denormalized number = " << ieee.getMaxDenormal() << "\n";
 	std::cout << "Minimal denormalized number = " << ieee.getMinDenormal() << "\n";
 	std::cout << "+1,0E0 = " << ieee.get10E0() << "\n";
-	std::cout << "F(a, b) = 2*a*b / (a*a + b*b)" << "\n";
+	std::cout << "F(a, b) = ln(y)*cos(x) + 3*tg(x)" << "\n";
 
 	std::cout << "\n";
 

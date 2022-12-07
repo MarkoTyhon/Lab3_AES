@@ -1,6 +1,7 @@
 #include "IEEE754.h"
 #include <algorithm>
 #include <iostream>
+#include <cmath>
 
 
 IEEE754::IEEE754() {
@@ -344,6 +345,7 @@ IEEE754 IEEE754::operator + (IEEE754 obj) {
 	return res;
 }
 
+
 IEEE754 IEEE754::operator-()const {
 	IEEE754 res = *this;
 	res.sign = !(res.sign);
@@ -562,3 +564,26 @@ IEEE754 IEEE754::operator / (IEEE754 obj) {
 	return IEEE754(first/second);
 }
 
+IEEE754 IEEE754::cos() {
+	IEEE754 res = *this;
+	int firstBias = getBias(res);
+	double man1 = getManD(res);
+	double first = pow(-1, res.sign) * man1 * pow(2, firstBias);
+	return IEEE754(std::cos(first));
+}
+
+IEEE754 IEEE754::tg() {
+	IEEE754 res = *this;
+	int firstBias = getBias(res);
+	double man1 = getManD(res);
+	double first = pow(-1, res.sign) * man1 * pow(2, firstBias);
+	return IEEE754(std::tan(first));
+}
+
+IEEE754 IEEE754::log() {
+	IEEE754 res = *this;
+	int firstBias = getBias(res);
+	double man1 = getManD(res);
+	double first = pow(-1, res.sign) * man1 * pow(2, firstBias);
+	return IEEE754(std::log(first));
+}

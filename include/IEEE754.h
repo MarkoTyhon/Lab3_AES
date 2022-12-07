@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <cmath>
 
 class IEEE754
 {
@@ -21,6 +22,9 @@ public:
 	IEEE754 operator * (IEEE754 y);
 	IEEE754 operator / (IEEE754 y);
 	friend std::ostream& operator<< (std::ostream& os, const IEEE754& obj);
+	IEEE754 cos();
+	IEEE754 tg();
+	IEEE754 log();
 
 	IEEE754 getZero();
 	IEEE754 getInf(int sign);
